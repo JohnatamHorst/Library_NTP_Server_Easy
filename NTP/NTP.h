@@ -13,15 +13,20 @@
 class NTP {
   public:
     // Metodos e Propriedades publicos
-  void initNtpServer(String server, unsigned int port);
+  NTP();
+  NTP(String serverLink, unsigned int _serverPort);
+ // void initNtpServer(String server, unsigned int port);
   time_t getNtpTime();
-  void sendNTPpacket();
 
   private:
     // Variaveis e Funcoes privadas
+	
   byte _packetBuffer[48];     
   const int _timeZone = -2;
-  String _ServerLink = "pool.ntp.br";
+  String _serverLink = "pool.ntp.br";
+  unsigned int _serverPort= 123;
   WiFiUDP _udp;
+  bool serialAvailable = false;
+  void sendNTPpacket();
 };
 #endif
