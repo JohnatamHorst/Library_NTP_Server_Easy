@@ -10,7 +10,7 @@ gitHub: JohnatamHorst
 
 #### Descrisão:
 
-Biblioteca que obtém data/hora de um servidor externo, via opção do usuário, instancia internamente o protocolo udp para comunicação com o mesmo e realiza o tratamento lógico da informação enviada pelo servidor NTP, retornando os segundos desde 01/01/1970.
+Biblioteca que obtém data/hora de um servidor externo, via opção do usuário, instancia internamente o protocolo udp para comunicação com o mesmo e realiza o tratamento lógico da informação enviada pelo servidor NTP, retornando os segundos desde 01/01/1970. É necessário estar conectado com a internet para a utilização desta biblioteca
 
 #### Funcionalidade:
 
