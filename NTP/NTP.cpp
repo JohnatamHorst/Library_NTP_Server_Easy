@@ -1,10 +1,13 @@
-/*
-AUTOR: JOHNATAM RENAN HORST
-DATA: 30/12/2018
-DESCRISAO: BIBLIOTECA PARA OBTENÇÃO DE DATA/HORA VIA SERVIDOR NTP, PODEMDO UTILIZAR UM DEFAULT, 
-
-*/
-
+/********************************************************
+ AUTOR: JOHNATAM RENAN HORST
+ DATA: 31/12/2018
+ DESCRISAO: CODIGO CPP DA CLASSE NTP.
+ OBSERVAÇÕES:
+	UTIILIZADO CODIGO DE LOGICA E EXEMPLO DISPONIBILIZADO PELO CANAL DO YOUTUBEINTERNET
+	INTERNET E COSISAS/ ANDRÉ MICHELON
+	LINK: https://www.youtube.com/watch?v=9Z-ROKOg5eg
+	/ 
+ */
 
 #include <NTP.h>
 
@@ -13,11 +16,13 @@ NTP::NTP(){
   WiFiUDP udp;
   udp.begin(_serverPort);    
   _udp = udp;
-  if(Serial.available()){
+  if(Serial){
 	Serial.print("Server: ");
-	Serial.println(_serverLink); 
+	Serial.print(_serverLink); 
 	Serial.print(" - Port: ");
-	Serial.println(_serverPort);
+	Serial.print(_serverPort);
+	Serial.print(" - Time Zone: ");
+	Serial.println(_timeZone);
   }
 }
 NTP::NTP(String server, unsigned int port){
@@ -26,17 +31,48 @@ NTP::NTP(String server, unsigned int port){
   _udp = udp;
   _serverPort = port;
   _serverLink = server;
-  if(Serial.available()){
+  if(Serial){
 	Serial.print("Server: ");
-	Serial.println(server); 
+	Serial.print(_serverLink); 
 	Serial.print(" - Port: ");
-	Serial.println(port);
+	Serial.print(_serverPort);
+	Serial.print(" - Time Zone: ");
+	Serial.println(_timeZone);
   }
 }
-  
+NTP::NTP(String server, unsigned int port, signed int timeZone){
+  WiFiUDP udp;
+  udp.begin(port);    
+  _udp = udp;
+  _serverPort = port;
+  _serverLink = server;
+  _timeZone = timeZone;
+  if(Serial){
+	Serial.print("Server: ");
+	Serial.print(_serverLink); 
+	Serial.print(" - Port: ");
+	Serial.print(_serverPort);
+	Serial.print(" - Time Zone: ");
+	Serial.println(_timeZone);
+  }
+}
+NTP::NTP(signed int timeZone){
+  WiFiUDP udp;
+  udp.begin(_serverPort);    
+  _udp = udp;
+  _timeZone = timeZone;
+  if(Serial){
+	Serial.print("Server: ");
+	Serial.print(_serverLink); 
+	Serial.print(" - Port: ");
+	Serial.print(_serverPort);
+	Serial.print(" - Time Zone: ");
+	Serial.println(_timeZone);
+  }
+}  
 time_t NTP::getNtpTime(){
   while (_udp.parsePacket() > 0) ; 
-  if(Serial.available()){
+  if(Serial){
   Serial.println("Transmit NTP Request");
   }
   sendNTPpacket();
@@ -44,7 +80,7 @@ time_t NTP::getNtpTime(){
   while (millis() - beginWait < 1500) {
     int size = _udp.parsePacket();
     if (size >= 48) {
-		if(Serial.available()){
+		if(Serial){
 			Serial.println("Receive NTP Response");
 		}
 		_udp.read(_packetBuffer, 48);  
@@ -53,10 +89,10 @@ time_t NTP::getNtpTime(){
 		secsSince1900 |= (unsigned long)_packetBuffer[41] << 16;
 		secsSince1900 |= (unsigned long)_packetBuffer[42] << 8;
 		secsSince1900 |= (unsigned long)_packetBuffer[43];
-		return secsSince1900 - 2208988800UL + _timeZone * 60;//;
+		return secsSince1900 - 2208988800UL + (_timeZone * 3600);//;
 	  }
 	}
-	if(Serial.available()){
+	if(Serial){
 		Serial.println("No NTP Response :-(");
 	}
   return 0; 

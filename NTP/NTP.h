@@ -1,5 +1,12 @@
 /********************************************************
- 
+ AUTOR: JOHNATAM RENAN HORST
+ DATA: 31/12/2018
+ DESCRISAO: HEADER DA CLASSE NTP.
+ OBSERVAÇÕES:
+	UTIILIZADO CODIGO DE LOGICA E EXEMPLO DISPONIBILIZADO PELO CANAL DO YOUTUBEINTERNET
+	INTERNET E COSISAS/ ANDRÉ MICHELON
+	LINK: https://www.youtube.com/watch?v=9Z-ROKOg5eg
+	/ 
  */
 
 #include <Arduino.h>
@@ -14,18 +21,18 @@ class NTP {
   public:
     // Metodos e Propriedades publicos
   NTP();
-  NTP(String serverLink, unsigned int _serverPort);
- // void initNtpServer(String server, unsigned int port);
+  NTP(String _serverLink, unsigned int _serverPort);
+  NTP(String _serverLink, unsigned int _serverPort, signed int _timeZone);  
+  NTP(signed int _timeZone);
   time_t getNtpTime();
 
   private:
-    // Variaveis e Funcoes privadas
-	
+    // Variaveis e Funcoes privadas	
   byte _packetBuffer[48];     
-  const int _timeZone = -2;
-  String _serverLink = "pool.ntp.br";
-  unsigned int _serverPort= 123;
-  WiFiUDP _udp;
+  signed int _timeZone = -2;				//default
+  String _serverLink = "pool.ntp.br";		//default
+  unsigned int _serverPort= 123;			//default
+  WiFiUDP _udp;	
   bool serialAvailable = false;
   void sendNTPpacket();
 };
